@@ -1,0 +1,2666 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0A0E1A">
+    <title>T Optimizer Pro - VIP</title>
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23000000' rx='20'/><text x='50' y='72' font-family='Arial Black' font-size='60' font-weight='900' fill='%23FFFFFF' text-anchor='middle'>T</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #00D9FF;
+            --secondary: #7B2FFF;
+            --background: #0A0E1A;
+            --surface: #151B2E;
+            --surface-light: #1E2642;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8B93B0;
+            --success: #00FF88;
+            --warning: #FFB800;
+            --danger: #FF4757;
+            --gradient: linear-gradient(135deg, #00D9FF 0%, #7B2FFF 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
+        }
+
+        .app-container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Logo Header */
+        .header {
+            padding: 20px 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #1a1a1a, #000000);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: logoShine 3s infinite;
+        }
+
+        @keyframes logoShine {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 900;
+            color: #FFFFFF;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            font-family: 'Arial Black', sans-serif;
+            letter-spacing: -1px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFFFFF 0%, #888888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .vip-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #888888 100%);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        .section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* Health Score Ring */
+        .health-ring-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 20px 30px;
+        }
+
+        .health-ring {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .health-ring svg {
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.4));
+        }
+
+        .health-ring .ring-bg {
+            fill: none;
+            stroke: var(--surface);
+            stroke-width: 12;
+        }
+
+        .health-ring .ring-progress {
+            fill: none;
+            stroke: url(#gradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 565;
+            stroke-dashoffset: 565;
+            transition: stroke-dashoffset 2s ease-out;
+        }
+
+        .health-score {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .health-score .score {
+            font-size: 52px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .health-score .label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .status-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .status-item .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-size: 18px;
+        }
+
+        .status-item .value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .status-item .name {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 20px 16px;
+        }
+
+        .action-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-card:active {
+            transform: scale(0.97);
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .action-card.active {
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .action-card.active::before {
+            opacity: 0.15;
+        }
+
+        .action-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(0, 217, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-card:nth-child(2) .action-icon { background: rgba(123, 47, 255, 0.15); }
+        .action-card:nth-child(3) .action-icon { background: rgba(0, 255, 136, 0.15); }
+        .action-card:nth-child(4) .action-icon { background: rgba(255, 184, 0, 0.15); }
+        .action-card:nth-child(5) .action-icon { background: rgba(255, 71, 87, 0.15); }
+        .action-card:nth-child(6) .action-icon { background: rgba(0, 200, 255, 0.15); }
+
+        .action-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-status {
+            font-size: 11px;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-status.optimizing { color: var(--primary); }
+        .action-status.done { color: var(--success); }
+
+        /* Optimize Button */
+        .optimize-btn-container {
+            padding: 0 20px 16px;
+        }
+
+        .optimize-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: var(--gradient);
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .optimize-btn:active { transform: scale(0.98); }
+        .optimize-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .optimize-btn .shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer { 100% { left: 100%; } }
+
+        /* Section Tabs */
+        .section-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px 14px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .section-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 10px 18px;
+            background: var(--surface);
+            border: none;
+            border-radius: 22px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        /* Tools List */
+        .tools-list {
+            padding: 0 20px;
+        }
+
+        .tool-item {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tool-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(0, 217, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .tool-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tool-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            width: 48px;
+            height: 28px;
+            background: var(--surface-light);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+
+        .toggle.active {
+            background: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.4);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after { transform: translateX(20px); }
+
+        /* Slider */
+        .slider-container { width: 100px; flex-shrink: 0; }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: var(--surface-light);
+            border-radius: 3px;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--gradient);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 20px 16px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        /* Chart */
+        .chart-container {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 16px;
+            margin: 0 20px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .chart-title { font-size: 14px; font-weight: 600; }
+        .chart-value { font-size: 12px; color: var(--primary); }
+
+        .chart {
+            height: 60px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient);
+            border-radius: 3px 3px 0 0;
+            opacity: 0.7;
+            transition: height 0.5s ease-out;
+        }
+
+        /* Comparison Card */
+        .comparison-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 16px;
+            margin: 0 20px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-row:last-child { border-bottom: none; }
+        .comparison-label { font-size: 13px; color: var(--text-secondary); }
+        .comparison-values { display: flex; gap: 16px; font-size: 13px; }
+        .before-value { color: var(--danger); font-weight: 600; }
+        .after-value { color: var(--success); font-weight: 600; }
+
+        /* Premium Badge */
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 700;
+            color: #000;
+            margin-left: 6px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(21, 27, 46, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 6px 14px;
+            border-radius: 10px;
+        }
+
+        .nav-item.active { color: var(--primary); }
+        .nav-item svg { width: 22px; height: 22px; }
+        .nav-item span { font-size: 10px; font-weight: 500; }
+
+        .nav-center {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(145deg, #1a1a1a, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -26px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-center:active { transform: scale(0.95); }
+
+        .nav-center .t-logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 26, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-overlay.show { display: flex; }
+
+        .loading-spinner {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+        .loading-spinner::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-spinner::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top-color: var(--secondary);
+            animation: spin 0.7s linear infinite reverse;
+        }
+
+        .loading-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .loading-progress {
+            width: 180px;
+            height: 4px;
+            background: var(--surface);
+            border-radius: 2px;
+            margin-top: 14px;
+            overflow: hidden;
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 26, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .success-overlay.show { display: flex; }
+
+        .success-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(0, 255, 136, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: successPulse 0.5s ease-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-icon svg { width: 45px; height: 45px; color: var(--success); }
+        .success-text { margin-top: 20px; font-size: 22px; font-weight: 700; color: var(--success); }
+        .success-details { margin-top: 10px; font-size: 13px; color: var(--text-secondary); text-align: center; line-height: 1.5; }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: calc(env(safe-area-inset-top) + 10px);
+            left: 16px;
+            right: 16px;
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(-150%);
+            transition: transform 0.3s ease-out;
+            z-index: 1001;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .notification.show { transform: translateY(0); }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(0, 255, 136, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-content { flex: 1; }
+        .notification-title { font-size: 13px; font-weight: 600; }
+        .notification-message { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0A0E1A 0%, #0D1225 50%, #0A0E1A 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particles container */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 8s infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 12s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; animation-duration: 10s; background: var(--secondary); }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; animation-duration: 14s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; animation-duration: 11s; background: var(--success); }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; animation-duration: 13s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 9s; background: var(--secondary); }
+        .particle:nth-child(7) { left: 70%; animation-delay: 6s; animation-duration: 15s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 7s; animation-duration: 10s; background: var(--warning); }
+        .particle:nth-child(9) { left: 90%; animation-delay: 8s; animation-duration: 12s; }
+        .particle:nth-child(10) { left: 15%; animation-delay: 0.5s; animation-duration: 11s; background: var(--secondary); }
+        .particle:nth-child(11) { left: 25%; animation-delay: 1.5s; animation-duration: 13s; }
+        .particle:nth-child(12) { left: 35%; animation-delay: 2.5s; animation-duration: 10s; background: var(--primary); }
+        .particle:nth-child(13) { left: 45%; animation-delay: 3.5s; animation-duration: 14s; }
+        .particle:nth-child(14) { left: 55%; animation-delay: 4.5s; animation-duration: 12s; background: var(--success); }
+        .particle:nth-child(15) { left: 65%; animation-delay: 5.5s; animation-duration: 11s; }
+        .particle:nth-child(16) { left: 75%; animation-delay: 6.5s; animation-duration: 13s; background: var(--secondary); }
+        .particle:nth-child(17) { left: 85%; animation-delay: 7.5s; animation-duration: 15s; }
+        .particle:nth-child(18) { left: 95%; animation-delay: 8.5s; animation-duration: 10s; background: var(--primary); }
+        .particle:nth-child(19) { left: 5%; animation-delay: 9s; animation-duration: 12s; }
+        .particle:nth-child(20) { left: 12%; animation-delay: 9.5s; animation-duration: 14s; background: var(--warning); }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Floating lines */
+        .floating-line {
+            position: absolute;
+            width: 1px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            opacity: 0.3;
+            animation: lineDrift 20s linear infinite;
+        }
+
+        .floating-line:nth-child(1) { left: 8%; animation-delay: 0s; height: 80px; }
+        .floating-line:nth-child(2) { left: 22%; animation-delay: 3s; height: 120px; }
+        .floating-line:nth-child(3) { left: 38%; animation-delay: 6s; height: 60px; }
+        .floating-line:nth-child(4) { left: 52%; animation-delay: 9s; height: 100px; }
+        .floating-line:nth-child(5) { left: 68%; animation-delay: 12s; height: 140px; }
+        .floating-line:nth-child(6) { left: 82%; animation-delay: 15s; height: 90px; }
+        .floating-line:nth-child(7) { left: 92%; animation-delay: 18s; height: 70px; }
+
+        @keyframes lineDrift {
+            0% {
+                transform: translateY(100vh) rotate(15deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-150px) rotate(-15deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glow effects */
+        .glow-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            top: -100px;
+            right: -100px;
+            animation: orbFloat 8s ease-in-out infinite, orbPulse 4s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: fixed;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(123, 47, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            bottom: 100px;
+            left: -80px;
+            animation: orbFloat 10s ease-in-out infinite reverse, orbPulse 5s ease-in-out infinite 1s;
+        }
+
+        .glow-orb-3 {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            top: 40%;
+            right: -60px;
+            animation: orbFloat 12s ease-in-out infinite 2s, orbPulse 6s ease-in-out infinite 2s;
+        }
+
+        .glow-orb-4 {
+            position: fixed;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 184, 0, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: orbFloat 14s ease-in-out infinite 3s, orbPulse 7s ease-in-out infinite 3s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.05); }
+            50% { transform: translate(0, 30px) scale(0.95); }
+            75% { transform: translate(-20px, -10px) scale(1.02); }
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Grid pattern overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Scanning line effect */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: scanDown 8s linear infinite;
+        }
+
+        @keyframes scanDown {
+            0% { top: -2px; opacity: 0; }
+            5% { opacity: 0.5; }
+            95% { opacity: 0.5; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Hexagon pattern */
+        .hex-pattern {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300D9FF' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: hexShift 60s linear infinite;
+        }
+
+        @keyframes hexShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(28px, 49px); }
+        }
+
+        /* Aurora effect */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 60%;
+            z-index: 0;
+            pointer-events: none;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(0, 217, 255, 0.03) 20%,
+                rgba(123, 47, 255, 0.05) 40%,
+                rgba(0, 255, 136, 0.03) 60%,
+                transparent 100%
+            );
+            filter: blur(60px);
+            animation: auroraWave 20s ease-in-out infinite;
+            transform-origin: center top;
+        }
+
+        @keyframes auroraWave {
+            0%, 100% { transform: translateX(0) skewX(0deg); }
+            25% { transform: translateX(5%) skewX(2deg); }
+            50% { transform: translateX(-5%) skewX(-2deg); }
+            75% { transform: translateX(3%) skewX(1deg); }
+        }
+
+        ::-webkit-scrollbar { width: 0; display: none; }
+
+        /* Quick scan card */
+        .scan-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-light) 100%);
+            border-radius: 18px;
+            padding: 16px;
+            margin: 0 20px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .scan-card:active { transform: scale(0.98); }
+
+        .scan-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(123, 47, 255, 0.2));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .scan-info { flex: 1; }
+        .scan-title { font-size: 15px; font-weight: 600; }
+        .scan-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+        .scan-arrow {
+            width: 32px;
+            height: 32px;
+            background: var(--surface);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        /* Feature highlights */
+        .feature-scroll {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px 14px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .feature-scroll::-webkit-scrollbar { display: none; }
+
+        .feature-card {
+            min-width: 140px;
+            background: var(--surface);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:active { transform: scale(0.97); }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 217, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin: 0 auto 10px;
+        }
+
+        .feature-name { font-size: 13px; font-weight: 600; }
+        .feature-status { font-size: 11px; color: var(--success); margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Elements -->
+    <div class="animated-bg"></div>
+    <div class="aurora"></div>
+    <div class="grid-overlay"></div>
+    <div class="hex-pattern"></div>
+    <div class="scan-line"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <!-- Floating lines -->
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+        <div class="floating-line"></div>
+    </div>
+    
+    <!-- Glow Orbs -->
+    <div class="glow-orb"></div>
+    <div class="glow-orb-2"></div>
+    <div class="glow-orb-3"></div>
+    <div class="glow-orb-4"></div>
+
+    <div class="app-container">
+        <!-- Header with T Logo -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <span class="logo-text">T</span>
+                </div>
+                <h1>Optimizer Pro</h1>
+            </div>
+            <div class="vip-badge">VIP PREMIUM</div>
+        </header>
+
+        <!-- Health Score Ring -->
+        <div class="health-ring-container">
+            <div class="health-ring">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00D9FF" />
+                            <stop offset="100%" stop-color="#7B2FFF" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="ring-bg" cx="100" cy="100" r="90" />
+                    <circle class="ring-progress" id="healthRing" cx="100" cy="100" r="90" />
+                </svg>
+                <div class="health-score">
+                    <div class="score" id="healthScore">0</div>
+                    <div class="label">Sức khỏe thiết bị</div>
+                </div>
+            </div>
+
+            <div class="status-indicators">
+                <div class="status-item">
+                    <div class="icon">🌡️</div>
+                    <div class="value" id="tempValue">--°C</div>
+                    <div class="name">Nhiệt độ</div>
+                </div>
+                <div class="status-item">
+                    <div class="icon">💾</div>
+                    <div class="value" id="ramValue">--%</div>
+                    <div class="name">RAM</div>
+                </div>
+                <div class="status-item">
+                    <div class="icon">📦</div>
+                    <div class="value" id="storageValue">--GB</div>
+                    <div class="name">Bộ nhớ</div>
+                </div>
+                <div class="status-item">
+                    <div class="icon">🔋</div>
+                    <div class="value" id="batteryValue">--%</div>
+                    <div class="name">Pin</div>
+                </div>
+                <div class="status-item">
+                    <div class="icon">📶</div>
+                    <div class="value" id="networkValue">--ms</div>
+                    <div class="name">Ping</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Tabs -->
+        <div class="section-tabs">
+            <button class="tab-btn active" data-tab="quick">Tối ưu</button>
+            <button class="tab-btn" data-tab="vip">VIP</button>
+            <button class="tab-btn" data-tab="tools">Công cụ</button>
+            <button class="tab-btn" data-tab="security">Bảo mật</button>
+            <button class="tab-btn" data-tab="stats">Thống kê</button>
+            <button class="tab-btn" data-tab="boost">Turbo</button>
+            <button class="tab-btn" data-tab="clean">Dọn dẹp</button>
+            <button class="tab-btn" data-tab="media">Media</button>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div id="quick-section" class="tab-content">
+            <!-- Quick Scan -->
+            <div class="scan-card" id="quickScanBtn">
+                <div class="scan-icon">🔍</div>
+                <div class="scan-info">
+                    <div class="scan-title">Quét nhanh hệ thống</div>
+                    <div class="scan-desc">Phân tích toàn bộ thiết bị trong 30 giây</div>
+                </div>
+                <div class="scan-arrow">→</div>
+            </div>
+
+            <div class="quick-actions">
+                <div class="action-card" data-action="cool">
+                    <div class="action-icon">❄️</div>
+                    <div class="action-title">Làm mát</div>
+                    <div class="action-status">Giảm nhiệt độ</div>
+                </div>
+                <div class="action-card" data-action="speed">
+                    <div class="action-icon">⚡</div>
+                    <div class="action-title">Tăng tốc</div>
+                    <div class="action-status">Mượt mà hơn</div>
+                </div>
+                <div class="action-card" data-action="clean">
+                    <div class="action-icon">✨</div>
+                    <div class="action-title">Dọn RAM</div>
+                    <div class="action-status">Giải phóng bộ nhớ</div>
+                </div>
+                <div class="action-card" data-action="battery">
+                    <div class="action-icon">🔋</div>
+                    <div class="action-title">Pin</div>
+                    <div class="action-status">Tiết kiệm pin</div>
+                </div>
+                <div class="action-card" data-action="network">
+                    <div class="action-icon">📶</div>
+                    <div class="action-title">Mạng</div>
+                    <div class="action-status">Tối ưu kết nối</div>
+                </div>
+                <div class="action-card" data-action="storage">
+                    <div class="action-icon">💽</div>
+                    <div class="action-title">Bộ nhớ</div>
+                    <div class="action-status">Dọn file rác</div>
+                </div>
+            </div>
+
+            <!-- Feature Highlights -->
+            <div class="section" style="padding-bottom: 0;">
+                <h3 class="section-title">Tính năng nổi bật</h3>
+            </div>
+            <div class="feature-scroll">
+                <div class="feature-card" data-feature="turbo">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-name">Turbo Mode</div>
+                    <div class="feature-status">Sẵn sàng</div>
+                </div>
+                <div class="feature-card" data-feature="ai">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-name">AI Optimize</div>
+                    <div class="feature-status">VIP Active</div>
+                </div>
+                <div class="feature-card" data-feature="game">
+                    <div class="feature-icon">🎮</div>
+                    <div class="feature-name">Game Mode</div>
+                    <div class="feature-status">Sẵn sàng</div>
+                </div>
+                <div class="feature-card" data-feature="photo">
+                    <div class="feature-icon">📸</div>
+                    <div class="feature-name">Photo Boost</div>
+                    <div class="feature-status">Sẵn sàng</div>
+                </div>
+                <div class="feature-card" data-feature="privacy">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-name">Privacy Guard</div>
+                    <div class="feature-status">Bật</div>
+                </div>
+            </div>
+
+            <div class="optimize-btn-container">
+                <button class="optimize-btn" id="optimizeAllBtn">
+                    <span class="shimmer"></span>
+                    Tối ưu toàn diện
+                </button>
+            </div>
+        </div>
+
+        <!-- VIP Section -->
+        <div id="vip-section" class="tab-content" style="display: none;">
+            <div class="scan-card" id="vipScanBtn" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 140, 0, 0.15)); border-color: rgba(255, 215, 0, 0.3);">
+                <div class="scan-icon" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 140, 0, 0.3));">👑</div>
+                <div class="scan-info">
+                    <div class="scan-title">VIP Ultimate Scan</div>
+                    <div class="scan-desc">Quét toàn diện với công nghệ AI cao cấp</div>
+                </div>
+                <div class="scan-arrow">→</div>
+            </div>
+
+            <div class="section" style="padding: 10px 20px 0;">
+                <h3 class="section-title">Tính năng VIP Độc quyền</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🤖</div>
+                        <div>
+                            <div class="tool-name">AI Smart Boost <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tối ưu thông minh bằng AI học máy</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="ai-smart-boost"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🔮</div>
+                        <div>
+                            <div class="tool-name">Predictive Optimize <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Dự đoán và tối ưu trước khi chậm</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="predictive-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">⚗️</div>
+                        <div>
+                            <div class="tool-name">Deep Neural Clean <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Dọn dẹp sâu bằng mạng nơ-ron</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="neural-clean"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🛸</div>
+                        <div>
+                            <div class="tool-name">Quantum Speed <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tăng tốc siêu nhanh công nghệ lượng tử</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="quantum-speed"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🎭</div>
+                        <div>
+                            <div class="tool-name">Stealth Mode <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Ẩn danh hoàn toàn trên internet</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="stealth-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🏎️</div>
+                        <div>
+                            <div class="tool-name">Racing Mode <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Hiệu năng cực cao cho game đua xe</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="racing-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🎬</div>
+                        <div>
+                            <div class="tool-name">Cinema Mode <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tối ưu xem phim 4K HDR</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="cinema-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🎧</div>
+                        <div>
+                            <div class="tool-name">Audio Enhance <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Nâng cao chất lượng âm thanh</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="audio-enhance"></div>
+                </div>
+            </div>
+
+            <div class="section" style="padding: 10px 20px 0;">
+                <h3 class="section-title">Bảo vệ VIP</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🔐</div>
+                        <div>
+                            <div class="tool-name">Military Encryption <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Mã hóa cấp quân sự AES-256</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="military-encrypt"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🕵️</div>
+                        <div>
+                            <div class="tool-name">Anti-Spy Shield <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Chống theo dõi và gián điệp</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="anti-spy"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🛡️</div>
+                        <div>
+                            <div class="tool-name">Firewall Pro <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tường lửa chuyên nghiệp</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="firewall-pro"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🦠</div>
+                        <div>
+                            <div class="tool-name">Virus Killer <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Diệt virus và malware real-time</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="virus-killer"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🔒</div>
+                        <div>
+                            <div class="tool-name">Vault Pro <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Két sắt bảo mật file riêng tư</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="vault-pro"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">📱</div>
+                        <div>
+                            <div class="tool-name">Anti-Theft <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Chống trộm và định vị thiết bị</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="anti-theft"></div>
+                </div>
+            </div>
+
+            <div class="section" style="padding: 10px 20px 0;">
+                <h3 class="section-title">Tối ưu chuyên sâu</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🧬</div>
+                        <div>
+                            <div class="tool-name">DNA Optimize <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tối ưu theo "DNA" sử dụng của bạn</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="dna-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">⚡</div>
+                        <div>
+                            <div class="tool-name">Lightning Charge <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tối ưu sạc nhanh an toàn</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="lightning-charge"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🌊</div>
+                        <div>
+                            <div class="tool-name">Liquid Cool Pro <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Làm mát như tản nhiệt nước</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="liquid-cool"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🚀</div>
+                        <div>
+                            <div class="tool-name">Rocket Launch <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Khởi động app siêu nhanh</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="rocket-launch"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">📡</div>
+                        <div>
+                            <div class="tool-name">5G Booster <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tăng tốc kết nối 5G/WiFi 6</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="5g-booster"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon" style="background: rgba(255, 215, 0, 0.2);">🔋</div>
+                        <div>
+                            <div class="tool-name">Battery Extender <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Kéo dài tuổi thọ pin 50%</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="battery-extender"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div id="tools-section" class="tab-content" style="display: none;">
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔄</div>
+                        <div>
+                            <div class="tool-name">Tự động tối ưu</div>
+                            <div class="tool-desc">Tự động chạy mỗi 30 phút</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="auto-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🛡️</div>
+                        <div>
+                            <div class="tool-name">Bảo vệ pin</div>
+                            <div class="tool-desc">Ngăn sạc quá mức</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="battery-protect"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🚀</div>
+                        <div>
+                            <div class="tool-name">Chế độ hiệu năng</div>
+                            <div class="tool-desc">Tăng hiệu suất tối đa</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="performance-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🌙</div>
+                        <div>
+                            <div class="tool-name">Chế độ đêm</div>
+                            <div class="tool-desc">Giảm ánh sáng xanh</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="night-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📡</div>
+                        <div>
+                            <div class="tool-name">Tối ưu mạng</div>
+                            <div class="tool-desc">Tăng tốc kết nối</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="network-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎮</div>
+                        <div>
+                            <div class="tool-name">Chế độ game</div>
+                            <div class="tool-desc">Tối ưu cho game</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="game-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📱</div>
+                        <div>
+                            <div class="tool-name">Khởi động nhanh</div>
+                            <div class="tool-desc">Tăng tốc khởi động app</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="fast-launch"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">💬</div>
+                        <div>
+                            <div class="tool-name">Thông báo thông minh</div>
+                            <div class="tool-desc">Lọc thông báo spam</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="smart-notify"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div id="security-section" class="tab-content" style="display: none;">
+            <div class="scan-card" id="securityScanBtn">
+                <div class="scan-icon">🛡️</div>
+                <div class="scan-info">
+                    <div class="scan-title">Quét bảo mật</div>
+                    <div class="scan-desc">Kiểm tra mối đe dọa và lỗ hổng</div>
+                </div>
+                <div class="scan-arrow">→</div>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔐</div>
+                        <div>
+                            <div class="tool-name">Khóa ứng dụng <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Bảo vệ app bằng mật khẩu</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="app-lock"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">👁️</div>
+                        <div>
+                            <div class="tool-name">Chống nhìn trộm</div>
+                            <div class="tool-desc">Bảo vệ màn hình</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="anti-peek"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🌐</div>
+                        <div>
+                            <div class="tool-name">VPN siêu tốc <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Bảo vệ kết nối internet</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="vpn"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🚫</div>
+                        <div>
+                            <div class="tool-name">Chặn quảng cáo <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Loại bỏ quảng cáo phiền toái</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="ad-block"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📍</div>
+                        <div>
+                            <div class="tool-name">Bảo vệ vị trí</div>
+                            <div class="tool-desc">Ẩn vị trí thật</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="location-protect"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🗑️</div>
+                        <div>
+                            <div class="tool-name">Xóa dấu vết</div>
+                            <div class="tool-desc">Xóa lịch sử duyệt web</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="clear-traces"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔔</div>
+                        <div>
+                            <div class="tool-name">Cảnh báo xâm nhập</div>
+                            <div class="tool-desc">Thông báo khi có truy cập lạ</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="intrusion-alert"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div id="stats-section" class="tab-content" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="optimizeCount">256</div>
+                    <div class="stat-label">Lần tối ưu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ramFreed">4.8GB</div>
+                    <div class="stat-label">RAM đã dọn</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="batterySaved">22%</div>
+                    <div class="stat-label">Pin tiết kiệm</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">18°C</div>
+                    <div class="stat-label">Giảm nhiệt</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3.2GB</div>
+                    <div class="stat-label">File rác đã xóa</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">45ms</div>
+                    <div class="stat-label">Giảm ping</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">CPU 24 giờ qua</div>
+                    <div class="chart-value">Trung bình: 28%</div>
+                </div>
+                <div class="chart" id="cpuChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Nhiệt độ 24 giờ qua</div>
+                    <div class="chart-value">Trung bình: 30°C</div>
+                </div>
+                <div class="chart" id="tempChart"></div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">RAM 24 giờ qua</div>
+                    <div class="chart-value">Trung bình: 42%</div>
+                </div>
+                <div class="chart" id="ramChart"></div>
+            </div>
+
+            <div class="comparison-card">
+                <h3 style="font-size: 15px; margin-bottom: 14px;">So sánh trước/sau</h3>
+                <div class="comparison-row">
+                    <div class="comparison-label">Nhiệt độ</div>
+                    <div class="comparison-values">
+                        <span class="before-value">45°C</span>
+                        <span>→</span>
+                        <span class="after-value">28°C</span>
+                    </div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-label">RAM sử dụng</div>
+                    <div class="comparison-values">
+                        <span class="before-value">92%</span>
+                        <span>→</span>
+                        <span class="after-value">38%</span>
+                    </div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-label">Tốc độ</div>
+                    <div class="comparison-values">
+                        <span class="before-value">Chậm</span>
+                        <span>→</span>
+                        <span class="after-value">Cực nhanh</span>
+                    </div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comparison-label">Pin</div>
+                    <div class="comparison-values">
+                        <span class="before-value">-8%/h</span>
+                        <span>→</span>
+                        <span class="after-value">-3%/h</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boost Section -->
+        <div id="boost-section" class="tab-content" style="display: none;">
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">💨</div>
+                        <div>
+                            <div class="tool-name">Mức làm mát</div>
+                            <div class="tool-desc">Cường độ: <span id="coolingLevel">70</span>%</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" min="0" max="100" value="70" id="coolingSlider">
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">⚡</div>
+                        <div>
+                            <div class="tool-name">Mức tăng tốc</div>
+                            <div class="tool-desc">Hiệu suất: <span id="speedLevel">85</span>%</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" min="0" max="100" value="85" id="speedSlider">
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔒</div>
+                        <div>
+                            <div class="tool-name">Giới hạn RAM</div>
+                            <div class="tool-desc">Ngưỡng: <span id="ramLevel">60</span>%</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" min="0" max="100" value="60" id="ramSlider">
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📶</div>
+                        <div>
+                            <div class="tool-name">Tối ưu mạng</div>
+                            <div class="tool-desc">Mức: <span id="networkLevel">80</span>%</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" class="slider" min="0" max="100" value="80" id="networkSlider">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" style="padding-top: 10px; padding-bottom: 0;">
+                <h3 class="section-title">Chức năng VIP Turbo</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎯</div>
+                        <div>
+                            <div class="tool-name">Deep Clean <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Dọn dẹp sâu hệ thống</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="deep-clean"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🧠</div>
+                        <div>
+                            <div class="tool-name">AI Optimize <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tối ưu bằng trí tuệ nhân tạo</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="ai-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">⏰</div>
+                        <div>
+                            <div class="tool-name">Lên lịch <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tự động tối ưu theo lịch</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="schedule"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔥</div>
+                        <div>
+                            <div class="tool-name">Extreme Mode <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Hiệu năng tối đa</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="extreme-mode"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">💎</div>
+                        <div>
+                            <div class="tool-name">Premium Turbo <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tăng tốc cấp cao nhất</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="premium-turbo"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clean Section -->
+        <div id="clean-section" class="tab-content" style="display: none;">
+            <div class="scan-card" id="deepCleanBtn">
+                <div class="scan-icon">🧹</div>
+                <div class="scan-info">
+                    <div class="scan-title">Dọn dẹp sâu</div>
+                    <div class="scan-desc">Quét và xóa tất cả file rác</div>
+                </div>
+                <div class="scan-arrow">→</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">2.8GB</div>
+                    <div class="stat-label">Cache</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1.2GB</div>
+                    <div class="stat-label">File tạm</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">856MB</div>
+                    <div class="stat-label">Nhật ký</div>
+                </div>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📁</div>
+                        <div>
+                            <div class="tool-name">Xóa cache ứng dụng</div>
+                            <div class="tool-desc">Giải phóng 2.8GB</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="clear-cache"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📋</div>
+                        <div>
+                            <div class="tool-name">Xóa clipboard</div>
+                            <div class="tool-desc">Xóa lịch sử copy</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="clear-clipboard"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🖼️</div>
+                        <div>
+                            <div class="tool-name">Ảnh trùng lặp <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tìm và xóa ảnh giống nhau</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="duplicate-photos"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📹</div>
+                        <div>
+                            <div class="tool-name">Video lớn <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tìm video chiếm nhiều dung lượng</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="large-videos"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📧</div>
+                        <div>
+                            <div class="tool-name">Email đính kèm</div>
+                            <div class="tool-desc">Xóa file đính kèm cũ</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="email-attachments"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">💬</div>
+                        <div>
+                            <div class="tool-name">Tin nhắn cũ</div>
+                            <div class="tool-desc">Xóa tin nhắn quá 30 ngày</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="old-messages"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎵</div>
+                        <div>
+                            <div class="tool-name">Nhạc offline</div>
+                            <div class="tool-desc">Xóa nhạc đã tải</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="offline-music"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Media Section -->
+        <div id="media-section" class="tab-content" style="display: none;">
+            <div class="scan-card" id="mediaScanBtn">
+                <div class="scan-icon">🎬</div>
+                <div class="scan-info">
+                    <div class="scan-title">Quét Media</div>
+                    <div class="scan-desc">Tìm ảnh/video chiếm dung lượng</div>
+                </div>
+                <div class="scan-arrow">→</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">12.5GB</div>
+                    <div class="stat-label">Ảnh</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8.2GB</div>
+                    <div class="stat-label">Video</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">2.1GB</div>
+                    <div class="stat-label">Nhạc</div>
+                </div>
+            </div>
+
+            <div class="section" style="padding: 10px 20px 0;">
+                <h3 class="section-title">Tối ưu Media VIP</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🖼️</div>
+                        <div>
+                            <div class="tool-name">Nén ảnh thông minh <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Giảm dung lượng không giảm chất lượng</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="smart-compress"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📹</div>
+                        <div>
+                            <div class="tool-name">Nén video 4K <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Nén video không mất chất lượng</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="video-compress"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📷</div>
+                        <div>
+                            <div class="tool-name">HEIC Optimizer <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Chuyển đổi ảnh HEIC hiệu quả</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="heic-optimize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🗂️</div>
+                        <div>
+                            <div class="tool-name">Auto Organize <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tự động sắp xếp ảnh theo ngày/địa điểm</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="auto-organize"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔍</div>
+                        <div>
+                            <div class="tool-name">Blur Detector <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tìm và xóa ảnh bị mờ</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="blur-detect"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">📸</div>
+                        <div>
+                            <div class="tool-name">Screenshot Cleaner <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Dọn screenshot cũ tự động</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="screenshot-clean"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎞️</div>
+                        <div>
+                            <div class="tool-name">Live Photo Optimizer <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Nén Live Photo thông minh</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="live-photo-opt"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">☁️</div>
+                        <div>
+                            <div class="tool-name">Cloud Backup Pro <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Sao lưu lên cloud tự động</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="cloud-backup"></div>
+                </div>
+            </div>
+
+            <div class="section" style="padding: 10px 20px 0;">
+                <h3 class="section-title">Công cụ sáng tạo</h3>
+            </div>
+
+            <div class="tools-list">
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">✨</div>
+                        <div>
+                            <div class="tool-name">AI Photo Enhance <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Cải thiện chất lượng ảnh bằng AI</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="ai-photo"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎨</div>
+                        <div>
+                            <div class="tool-name">Color Correction <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Chỉnh màu ảnh tự động</div>
+                        </div>
+                    </div>
+                    <div class="toggle" data-toggle="color-correct"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🔊</div>
+                        <div>
+                            <div class="tool-name">Audio Boost <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Tăng chất lượng âm thanh video</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="audio-boost"></div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <div class="tool-icon">🎵</div>
+                        <div>
+                            <div class="tool-name">Music Equalizer <span class="premium-badge">VIP</span></div>
+                            <div class="tool-desc">Cân bằng âm thanh chuyên nghiệp</div>
+                        </div>
+                    </div>
+                    <div class="toggle active" data-toggle="music-eq"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-nav="stats">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span>Thống kê</span>
+        </div>
+        <div class="nav-center" id="navOptimize">
+            <span class="t-logo">T</span>
+        </div>
+        <div class="nav-item" data-nav="settings">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>Cài đặt</span>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <span class="loading-logo">T</span>
+        </div>
+        <div class="loading-text" id="loadingText">Đang tối ưu...</div>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <div class="success-text">Hoàn thành!</div>
+        <div class="success-details" id="successDetails">
+            Đã tối ưu thành công<br>
+            Thiết bị của bạn đang chạy mượt hơn
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-icon">
+            <svg width="20" height="20" fill="none" stroke="#00FF88" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title" id="notificationTitle">Thành công</div>
+            <div class="notification-message" id="notificationMessage">Đã hoàn thành tối ưu</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initHealthScore();
+            initCharts();
+            initActionCards();
+            initToggleSwitches();
+            initTabs();
+            initOptimizeButtons();
+            initSliders();
+            initFeatureCards();
+            initScanButtons();
+        });
+
+        function initHealthScore() {
+            const healthRing = document.getElementById('healthRing');
+            const healthScore = document.getElementById('healthScore');
+            const targetScore = 92;
+            const circumference = 2 * Math.PI * 90;
+            
+            setTimeout(() => {
+                const offset = circumference - (targetScore / 100) * circumference;
+                healthRing.style.strokeDashoffset = offset;
+                animateValue(healthScore, 0, targetScore, 2000);
+            }, 500);
+
+            document.getElementById('tempValue').textContent = '28°C';
+            document.getElementById('ramValue').textContent = '38%';
+            document.getElementById('storageValue').textContent = '32GB';
+            document.getElementById('batteryValue').textContent = '85%';
+            document.getElementById('networkValue').textContent = '12ms';
+        }
+
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                element.textContent = Math.floor(progress * (end - start) + start);
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function initCharts() {
+            const cpuData = [25, 35, 28, 42, 30, 22, 35, 45, 38, 28, 32, 38, 42, 32, 35, 28, 40, 45, 35, 28, 32, 38, 28, 22];
+            const tempData = [26, 30, 32, 35, 38, 35, 32, 30, 28, 26, 30, 32, 35, 32, 30, 28, 26, 30, 32, 30, 28, 26, 24, 23];
+            const ramData = [35, 42, 38, 48, 45, 40, 38, 52, 48, 42, 45, 50, 48, 42, 40, 38, 45, 50, 45, 40, 42, 45, 40, 35];
+            
+            createChart('cpuChart', cpuData);
+            createChart('tempChart', tempData);
+            createChart('ramChart', ramData);
+        }
+
+        function createChart(containerId, data) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const maxValue = Math.max(...data);
+            
+            data.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = '0%';
+                container.appendChild(bar);
+                
+                setTimeout(() => {
+                    bar.style.height = (value / maxValue * 100) + '%';
+                }, index * 40);
+            });
+        }
+
+        function initActionCards() {
+            const cards = document.querySelectorAll('.action-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const action = this.dataset.action;
+                    runOptimization(action, this);
+                });
+            });
+        }
+
+        function runOptimization(action, card) {
+            const statusEl = card.querySelector('.action-status');
+            const originalStatus = statusEl.textContent;
+            
+            card.classList.add('active');
+            statusEl.classList.add('optimizing');
+            
+            const actions = {
+                'cool': 'Đang làm mát...',
+                'speed': 'Đang tăng tốc...',
+                'clean': 'Đang dọn RAM...',
+                'battery': 'Đang tối ưu pin...',
+                'network': 'Đang tối ưu mạng...',
+                'storage': 'Đang dọn bộ nhớ...'
+            };
+            
+            statusEl.textContent = actions[action] || 'Đang xử lý...';
+            
+            if (navigator.vibrate) navigator.vibrate(20);
+            
+            setTimeout(() => {
+                statusEl.classList.remove('optimizing');
+                statusEl.classList.add('done');
+                statusEl.textContent = 'Hoàn thành!';
+                
+                if (navigator.vibrate) navigator.vibrate([10, 50, 10]);
+                
+                showNotification('Thành công!', `Đã ${originalStatus.toLowerCase()}`);
+                
+                setTimeout(() => {
+                    card.classList.remove('active');
+                    statusEl.classList.remove('done');
+                    statusEl.textContent = originalStatus;
+                }, 2000);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function initToggleSwitches() {
+            const toggles = document.querySelectorAll('.toggle');
+            
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    if (navigator.vibrate) navigator.vibrate(10);
+                    
+                    const isActive = this.classList.contains('active');
+                    const toggleName = this.dataset.toggle;
+                    showNotification(
+                        isActive ? 'Đã bật' : 'Đã tắt',
+                        `${toggleName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`
+                    );
+                });
+            });
+        }
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const sections = {
+                'quick': document.getElementById('quick-section'),
+                'vip': document.getElementById('vip-section'),
+                'tools': document.getElementById('tools-section'),
+                'security': document.getElementById('security-section'),
+                'stats': document.getElementById('stats-section'),
+                'boost': document.getElementById('boost-section'),
+                'clean': document.getElementById('clean-section'),
+                'media': document.getElementById('media-section')
+            };
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    Object.keys(sections).forEach(key => {
+                        if (sections[key]) {
+                            sections[key].style.display = key === targetTab ? 'block' : 'none';
+                        }
+                    });
+                    
+                    if (targetTab === 'stats') initCharts();
+                });
+            });
+        }
+
+        function initOptimizeButtons() {
+            const optimizeBtn = document.getElementById('optimizeAllBtn');
+            const navOptimize = document.getElementById('navOptimize');
+            
+            if (optimizeBtn) optimizeBtn.addEventListener('click', runFullOptimization);
+            if (navOptimize) navOptimize.addEventListener('click', runFullOptimization);
+        }
+
+        function initSliders() {
+            const sliders = [
+                { id: 'coolingSlider', label: 'coolingLevel' },
+                { id: 'speedSlider', label: 'speedLevel' },
+                { id: 'ramSlider', label: 'ramLevel' },
+                { id: 'networkSlider', label: 'networkLevel' }
+            ];
+            
+            sliders.forEach(({ id, label }) => {
+                const slider = document.getElementById(id);
+                const labelEl = document.getElementById(label);
+                
+                if (slider && labelEl) {
+                    slider.addEventListener('input', function() {
+                        labelEl.textContent = this.value;
+                    });
+                }
+            });
+        }
+
+        function initFeatureCards() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const feature = this.dataset.feature;
+                    showNotification('Đang kích hoạt', `${feature.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`);
+                    
+                    if (navigator.vibrate) navigator.vibrate(15);
+                });
+            });
+        }
+
+        function initScanButtons() {
+            const quickScan = document.getElementById('quickScanBtn');
+            const securityScan = document.getElementById('securityScanBtn');
+            const deepClean = document.getElementById('deepCleanBtn');
+            const vipScan = document.getElementById('vipScanBtn');
+            const mediaScan = document.getElementById('mediaScanBtn');
+            
+            if (quickScan) quickScan.addEventListener('click', () => runScan('Quét nhanh hệ thống'));
+            if (securityScan) securityScan.addEventListener('click', () => runScan('Quét bảo mật'));
+            if (deepClean) deepClean.addEventListener('click', () => runScan('Dọn dẹp sâu'));
+            if (vipScan) vipScan.addEventListener('click', () => runScan('VIP Ultimate Scan'));
+            if (mediaScan) mediaScan.addEventListener('click', () => runScan('Quét Media'));
+        }
+
+        function runScan(scanType) {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const successOverlay = document.getElementById('successOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const progressBar = document.getElementById('loadingProgressBar');
+            const successDetails = document.getElementById('successDetails');
+            
+            loadingOverlay.classList.add('show');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 30) loadingText.textContent = 'Đang quét...';
+                else if (progress < 60) loadingText.textContent = 'Đang phân tích...';
+                else if (progress < 90) loadingText.textContent = 'Đang tối ưu...';
+                else loadingText.textContent = 'Hoàn tất...';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        loadingOverlay.classList.remove('show');
+                        progressBar.style.width = '0%';
+                        
+                        successDetails.innerHTML = `${scanType} hoàn tất!<br>Thiết bị đã được tối ưu thành công`;
+                        successOverlay.classList.add('show');
+                        createSuccessParticles();
+                        
+                        if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+                        
+                        setTimeout(() => {
+                            successOverlay.classList.remove('show');
+                        }, 2500);
+                    }, 300);
+                }
+            }, 200);
+        }
+
+        function runFullOptimization() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const successOverlay = document.getElementById('successOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const progressBar = document.getElementById('loadingProgressBar');
+            
+            const steps = [
+                'Đang phân tích hệ thống...',
+                'Đang dọn dẹp cache...',
+                'Đang tối ưu RAM...',
+                'Đang làm mát CPU...',
+                'Đang tối ưu pin...',
+                'Đang tối ưu mạng...',
+                'Đang quét bảo mật...',
+                'Đang hoàn tất...'
+            ];
+            
+            loadingOverlay.classList.add('show');
+            if (navigator.vibrate) navigator.vibrate(30);
+            
+            let currentStep = 0;
+            const totalSteps = steps.length;
+            
+            function nextStep() {
+                if (currentStep < totalSteps) {
+                    loadingText.textContent = steps[currentStep];
+                    progressBar.style.width = ((currentStep + 1) / totalSteps * 100) + '%';
+                    currentStep++;
+                    setTimeout(nextStep, 600 + Math.random() * 400);
+                } else {
+                    loadingOverlay.classList.remove('show');
+                    progressBar.style.width = '0%';
+                    
+                    setTimeout(() => {
+                        successOverlay.classList.add('show');
+                        createSuccessParticles();
+                        
+                        if (navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 50]);
+                        
+                        const healthRing = document.getElementById('healthRing');
+                        const healthScore = document.getElementById('healthScore');
+                        const newScore = 97 + Math.floor(Math.random() * 3);
+                        const circumference = 2 * Math.PI * 90;
+                        const offset = circumference - (newScore / 100) * circumference;
+                        healthRing.style.strokeDashoffset = offset;
+                        animateValue(healthScore, 92, newScore, 500);
+                        
+                        document.getElementById('tempValue').textContent = '24°C';
+                        document.getElementById('ramValue').textContent = '28%';
+                        document.getElementById('networkValue').textContent = '8ms';
+                        
+                        setTimeout(() => {
+                            successOverlay.classList.remove('show');
+                        }, 2500);
+                    }, 300);
+                }
+            }
+            
+            nextStep();
+        }
+
+        function createSuccessParticles() {
+            const colors = ['#00D9FF', '#7B2FFF', '#00FF88', '#FFB800', '#FFFFFF'];
+            
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: ${Math.random() * 8 + 4}px;
+                    height: ${Math.random() * 8 + 4}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: 50%;
+                    left: 50%;
+                    top: 50%;
+                    pointer-events: none;
+                    z-index: 1002;
+                `;
+                document.body.appendChild(particle);
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 250 + 80;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                let x = 0, y = 0, opacity = 1;
+                
+                function animate() {
+                    x += vx * 0.02;
+                    y += vy * 0.02 + 1.5;
+                    opacity -= 0.025;
+                    
+                    particle.style.transform = `translate(${x}px, ${y}px)`;
+                    particle.style.opacity = opacity;
+                    
+                    if (opacity > 0) requestAnimationFrame(animate);
+                    else particle.remove();
+                }
+                
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function showNotification(title, message) {
+            const notification = document.getElementById('notification');
+            const notificationTitle = document.getElementById('notificationTitle');
+            const notificationMessage = document.getElementById('notificationMessage');
+            
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
